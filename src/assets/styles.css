@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+    h1 {
+       @apply h-1
+    }
+
+    ul {
+     @apply list-disc;
+    }
+}
+
+#app {  
+  display: grid;
+  grid-template-columns: min-content;
+  grid-template-areas:
+    "header header header header header header"
+    "menu main main main main main"
+    "footer footer footer footer footer footer";  
+}
+
+header {
+  grid-area: header;
+}
+aside {
+  grid-area: menu;
+  /* min-width: 100%; */
+}
+main {
+  grid-area: main;
+  min-height:100vh;
+  min-width: fit-content;
+}
+/* // .item4 { grid-area: right; } */
+footer {
+  grid-area: footer;
+}
