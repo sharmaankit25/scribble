@@ -1,0 +1,68 @@
+[
+    {
+        "code": "assets",
+        "name": "Asset",
+        "description": "Things you own. Your assets could include a car, cash, a house, stocks, or anything else that has convertible value. Convertible value means that theoretically you could sell the item for cash.",
+        "accountType": "ASSET",
+        "parentCode": "",
+        "placeholder": true
+    },
+    {
+        "code": "liabilities",
+        "name": "Liabilities",
+        "description": "Things you owe. Your liabilities could include a car loan, a student loan, a mortgage, your investment margin account, or anything else which you must pay back at some time.",
+        "accountType": "LIABILITY",
+        "parentCode": "",
+        "placeholder": true
+    },
+    {
+        "code": "equity",
+        "name": "Equity",
+        "description": "Overall net worth. It represents what is left over after you subtract your liabilities from your assets. It can be thought of as the portion of your assets that you own outright, without any debt.",
+        "accountType": "EQUITY",
+        "parentCode": "",
+        "placeholder": true
+    },
+    {
+        "code": "income",
+        "name": "Income",
+        "description": "Increases the value of your accounts. Income is the payment you receive for your time, services you provide, or the use of your money.",
+        "parentCode": "",
+        "placeholder": true
+    },
+    {
+        "code": "expense",
+        "name": "Expenses",
+        "description": "Decreases the value of your accounts. Expense refers to money you spend to purchase goods or services provided by someone else for early consumption. ",
+        "parentCode": "",
+        "placeholder": true
+    },
+    {
+        "code": "current_assets",
+        "name": "Current Assets",
+        "description": "",
+        "parentCode": "assets",
+        "placeholder": true
+    },
+    {
+        "code": "cash_in_wallet",
+        "name": "Cash In wallet",
+        "description": "",
+        "parentCode": "current_assets",
+        "placeholder": false
+    },
+    {
+        "code": "checking_account",
+        "name": "Checking Account",
+        "description": "",
+        "parentCode": "current_assets",
+        "placeholder": false
+    },
+    {
+        "code": "savings_account",
+        "name": "Savings Account",
+        "description": "",
+        "parentCode": "current_assets",
+        "placeholder": false
+    }
+]
