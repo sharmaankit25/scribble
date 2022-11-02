@@ -1,0 +1,34 @@
+name: Build Vue
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Build Scribble Project
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js v14.x        
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+
+      - name: Build Application
+        run: yarn build
+
+      - name: Build Docs
+        run: yarn docs:build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: ./dist
+          github_token: ${{ secrets.GH_PAGES_DEPLOY }}
+          user_name: ${{ secrets.MY_USER_NAME }}
+          user_email: ${{ secrets.MY_USER_EMAIL }}
+          commit_message: Update Vite2.x + Vue3.x + TypeScript Starter          
