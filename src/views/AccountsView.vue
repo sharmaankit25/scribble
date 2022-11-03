@@ -89,7 +89,7 @@
                 >
                   <option value="">Select Category</option>
                   <option
-                    v-for="cat in settings.basicAccounts"
+                    v-for="cat in categories"
                     :key="cat.code"
                     :value="cat.code"
                   >
@@ -137,6 +137,7 @@
       </div>
     </Dialog>
   </TransitionRoot>
+
   <div class="fixed bottom-10 right-10">
     <button @click="openModal" class="btn btn-circle">
       <PlusIcon />
@@ -156,6 +157,11 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
+// import { useGroupStore } from "@/stores/group.store";
+import { useCategoryStore } from "@/stores/category.store";
+
+// const { groups } = useGroupStore();
+const { categories } = useCategoryStore();
 
 const { settings } = useSettingsStore();
 const { accounts, addAccount } = useAccountsStore();
@@ -166,7 +172,7 @@ const accountType = ref<string>("");
 const parentAccount = ref<string>("");
 
 const accountsList = computed(() => {
-  return settings.accounts.filter((a) => a.type === accountCategory.value);
+  return settings.accounts.types.filter((a) => a.categoryId === accountCategory.value);
 });
 
 const isOpen = ref(false);

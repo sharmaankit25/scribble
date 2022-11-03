@@ -31,7 +31,7 @@
       {{ acc.name }} - {{ acc.description }}
       <ol>
         <li
-          v-for="basicAcc in settings.basicAccounts.filter(
+          v-for="basicAcc in settings.categories.filter(
             (bac) => bac.group === acc.code
           )"
           :key="basicAcc.code"
