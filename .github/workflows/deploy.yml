@@ -1,4 +1,4 @@
-name: Build Vue
+name: Deploy
 
 on:
   push:
@@ -6,29 +6,46 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    name: Build Scribble Project
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Node.js v14.x        
-        uses: actions/setup-node@v3
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
         with:
           node-version: 16
-          cache: npm
-      - run: npm install
 
-      - name: Build Application
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Build project
         run: npm run build
 
-      - name: Build Docs
-        run: npm run docs:build
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v2
+        with:
+          name: production-files
+          path: ./dist
 
-      - name: Deploy
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: production-files
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          publish_dir: dist
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          user_name: ${{ secrets.MY_USER_NAME }}
-          user_email: ${{ secrets.MY_USER_EMAIL }}
-          commit_message: Update Vite2.x + Vue3.x + TypeScript Starter
+          publish_dir: ./dist
