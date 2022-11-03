@@ -26,6 +26,7 @@
     "daisyui": "^2.31.0",
     "dropbox": "^10.33.0",
     "marked": "^4.1.1",
+    "nanoid": "^4.0.0",
     "pinia": "^2.0.21",
     "pinia-orm": "^1.1.0",
     "pinia-plugin-persistedstate": "^2.3.0",

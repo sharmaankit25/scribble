@@ -3,7 +3,7 @@
         "code": "assets",
         "name": "Asset",
         "description": "Things you own. Your assets could include a car, cash, a house, stocks, or anything else that has convertible value. Convertible value means that theoretically you could sell the item for cash.",
-        "accountType": "ASSET",
+        "accountTypeCode": "ASSET",
         "parentCode": "",
         "placeholder": true
     },

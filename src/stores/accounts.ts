@@ -1,21 +1,35 @@
-import { ref } from "vue";
-import { defineStore } from "pinia";
-
+import { useRepo } from "pinia-orm";
+import { computed } from "vue";
+import Account from "./models/Account.modal";
+import type AccountType from "./models/AccountType.modal";
 interface AccountsInterface {
-  code: string;
   name: string;
-  category: string;
   description: string;
-  type: string;
-  parent: string;
+  accountTypeCode: string;
+  parentId: string;
   placeholder: boolean;
 }
 
-export const useAccountsStore = defineStore("accounts", () => {
-  const accounts = ref<AccountsInterface[]>([]);
-  const addAccount = (content: AccountsInterface) => {
-    accounts.value.push(content);
+type AccountIdType = string | number;
+
+export const useAccountStore = () => {
+  const accountRepo = useRepo(Account);
+  const accounts = accountRepo.all();
+  const accountsWithType = computed<Account[]>(() =>
+    accountRepo.withAll().get()
+  );
+  const createAccount = (data: AccountsInterface) => {
+    accountRepo.save(data);
+  };
+  const deleteAccount = async (id: AccountIdType) => {
+    return await accountRepo.destroy(id);
   };
 
-  return { accounts, addAccount };
-});
+  return {
+    accounts,
+    accountRepo,
+    accountsWithType,
+    createAccount,
+    deleteAccount,
+  };
+};

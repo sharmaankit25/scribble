@@ -11,7 +11,7 @@ import AccountType from "./stores/models/AccountType.modal";
 
 const groupRepo = useRepo(Group);
 const categoryRepo = useRepo(Category);
-const accountTypeRepo = useRepo(AccountType)
+const accountTypeRepo = useRepo(AccountType);
 
 groupRepo.save(appSettings.accounts.groups);
 categoryRepo.save(appSettings.accounts.categories);

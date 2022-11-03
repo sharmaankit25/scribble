@@ -10,7 +10,7 @@
     <div class="container px-3 py-12 mx-auto">
       <div class="flex flex-wrap gap-2">
         <div
-          v-for="ac in accounts"
+          v-for="ac in accountsWithType"
           :key="ac.code"
           class="card bg-slate-200 shadow-md w-full"
         >
@@ -18,15 +18,21 @@
             <span>
               <h2 class="text-gray-500 card-title">{{ ac.name }}</h2>
               <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">
-                {{ ac.category }} - {{ ac.type }}
+                {{ ac.accountType?.name }} - {{ ac.accountType?.categoryId }}
               </h3>
               <h2 class="text-gray-900 title-font text-lg font-medium">
                 {{ ac.parent }}
               </h2>
               <p class="">{{ settings.currency.symbol }}</p>
             </span>
-            <div class="card-actions">
+            <div class="card-actions flex flex-col">
               <button class="btn btn-primary btn-sm">+</button>
+              <button
+                @click="deleteAccount(ac.id)"
+                class="btn btn-error btn-sm"
+              >
+                -
+              </button>
             </div>
           </div>
         </div>
@@ -149,7 +155,7 @@
 import { PlusIcon } from "@heroicons/vue/24/solid";
 import { computed, ref } from "vue";
 import { useSettingsStore } from "@/stores/settings";
-import { useAccountsStore } from "@/stores/accounts";
+import { useAccountStore } from "@/stores/accounts";
 import {
   TransitionRoot,
   TransitionChild,
@@ -157,14 +163,13 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
-// import { useGroupStore } from "@/stores/group.store";
 import { useCategoryStore } from "@/stores/category.store";
 
 // const { groups } = useGroupStore();
 const { categories } = useCategoryStore();
 
 const { settings } = useSettingsStore();
-const { accounts, addAccount } = useAccountsStore();
+const { accountsWithType, createAccount, deleteAccount } = useAccountStore();
 
 const accountCategory = ref<string>("");
 const accountName = ref<string>("");
@@ -172,18 +177,18 @@ const accountType = ref<string>("");
 const parentAccount = ref<string>("");
 
 const accountsList = computed(() => {
-  return settings.accounts.types.filter((a) => a.categoryId === accountCategory.value);
+  return settings.accounts.types.filter(
+    (a) => a.categoryId === accountCategory.value
+  );
 });
 
 const isOpen = ref(false);
 
 function addUserAccount() {
-  addAccount({
-    category: accountCategory.value,
+  createAccount({
     name: accountName.value,
-    type: accountType.value,
-    parent: parentAccount.value,
-    code: "",
+    accountTypeCode: accountType.value,
+    parentId: parentAccount.value,
     description: "",
     placeholder: false,
   });
