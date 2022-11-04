@@ -1,10 +1,29 @@
 [
     { 
-        "date": "",
+        "date": "03/11/2022 12:05 AM",
         "num": "",
-        "description": "",
-        "transferAcc": "",
-        "type": "deposit/widraw",
-        "amount": ""
+        "description": "Salary deposit",
+        "transferAcc": "Savings",
+        "type": "deposit",
+        "amount": "10000"
+    },
+    { 
+        "date": "04/11/2022 12:05 AM",
+        "num": "",
+        "description": "cash widraw",
+        "transferAcc": "Cash",
+        "type": "deposit",
+        "amount": "5000"
+     },
+     { 
+        "date": "04/11/2022 12:05 AM",
+        "num": "",
+        "description": "cash widraw",
+        "transferAcc": "Savings",
+        "type": "withdraw",
+        "amount": "5000"
      }
 ]
+
+// Savings = +10000 -5000 = 5000
+// Cash = +5000 = 5000

@@ -2,9 +2,9 @@
   <div class="about">
     <h1>Dashboard</h1>
     <br />
-    <!-- <a :href="authUrl" target="_blank" rel="noopener noreferrer"
+    <a class="btn btn-success" :href="authUrl" target="_blank" rel="noopener noreferrer"
       >Sync Via Dropbox</a
-    > -->
+    >
     <br />
     <div class="stats bg-base-200 stats-vertical md:stats-horizontal shadow">
       <div class="stat">

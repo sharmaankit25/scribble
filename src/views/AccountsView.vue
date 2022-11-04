@@ -55,7 +55,7 @@
       </TransitionChild>
       <div class="fixed inset-0 overflow-y-auto">
         <div
-          class="flex min-h-full items-center justify-center p-4 text-center"
+          class="flex min-h-full sm:items-center items-end justify-center p-4 text-center"
         >
           <TransitionChild
             as="template"
@@ -152,10 +152,11 @@
 </template>
 
 <script setup lang="ts">
-import { PlusIcon } from "@heroicons/vue/24/solid";
 import { computed, ref } from "vue";
+import { PlusIcon } from "@heroicons/vue/24/solid";
 import { useSettingsStore } from "@/stores/settings";
-import { useAccountStore } from "@/stores/accounts";
+import { useAccountStore } from "@/stores/accounts.store";
+import { useFlash } from "../stores/utils";
 import {
   TransitionRoot,
   TransitionChild,
@@ -192,11 +193,15 @@ function addUserAccount() {
     description: "",
     placeholder: false,
   });
-
+  useFlash({
+    message: `New Account ${accountName.value} Created`,
+    type: "success",
+  });
   accountCategory.value = "";
   accountName.value = "";
   accountType.value = "";
   parentAccount.value = "";
+
   closeModal();
 }
 
