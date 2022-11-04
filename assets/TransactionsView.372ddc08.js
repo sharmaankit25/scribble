@@ -1,1 +1,0 @@
-import{u as t}from"./utils.286baf25.js";import{d as n,a,c as o,b as s,F as c}from"./index.081daacb.js";const r=s("h1",null,"Transactions",-1),p=n({__name:"TransactionsView",setup(l){function e(){t({message:"TEST",type:"success"})}return(u,i)=>(a(),o(c,null,[r,s("button",{onClick:e,class:"btn btn-success"},"Emit Event")],64))}});export{p as default};
