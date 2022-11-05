@@ -1,7 +1,6 @@
 import { useRepo } from "pinia-orm";
 import { computed } from "vue";
 import Account from "./models/Account.modal";
-import type AccountType from "./models/AccountType.modal";
 interface AccountsInterface {
   name: string;
   description: string;

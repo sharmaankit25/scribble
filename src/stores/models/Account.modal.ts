@@ -1,7 +1,7 @@
 // account Model
 
 import { Model } from "pinia-orm";
-import { BelongsTo, Bool, HasOne, Str } from "pinia-orm/dist/decorators";
+import { Bool, HasOne, Str } from "pinia-orm/dist/decorators";
 import { Uid } from "pinia-orm/dist/nanoid/index";
 import AccountType from "./AccountType.modal";
 
@@ -14,6 +14,7 @@ export default class Account extends Model {
   @Str("") declare description: string;
   @Str("") declare accountTypeCode: string;
   @Str("") declare parentId: string;
+  @Str("") declare defaultTransferAccountId: string;
   @Bool(false) declare placeholder: boolean;
 
   @HasOne(() => AccountType, "code", "accountTypeCode")
