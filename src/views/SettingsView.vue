@@ -2,7 +2,7 @@
   <h1>Settings Page</h1>
   <br />
 
-  <template v-if="!dropboxAuthDetails">
+  <template v-if="!dropboxAuthDetails.access_token">
     <div class="form-control" v-if="dropboxGeneratedAuthUrl">
       <div class="input-group">
         <input
@@ -142,7 +142,14 @@ const storedTransactions = useLocalStorage("transactions", "");
 const storedAccounts = useLocalStorage("accounts", "");
 const { copy, copied, isSupported } = useClipboard({});
 
-const dbxAuth = new DropboxAuth({ clientId: CLIENT_ID });
+const dbxAuth = new DropboxAuth({
+  clientId: CLIENT_ID,
+  refreshToken: dropboxAuthDetails.value.refresh_token,
+  accessToken: dropboxAuthDetails.value.access_token,
+  customHeaders: {
+    Authorization: `bearer ${dropboxAuthDetails.value.access_token}`
+  }
+});
 
 async function submitDropboxAccessCode() {
   if (codeVerifier.value) {
@@ -188,26 +195,37 @@ async function doAuth() {
 }
 
 async function syncAndBackupData() {
-  dbxAuth.setAccessToken(dropboxAuthDetails.value.access_token);
-  // dbxAuth.checkAndRefreshAccessToken();
+  // dbxAuth.setAccessToken(dropboxAuthDetails.value.access_token);
+  dbxAuth.checkAndRefreshAccessToken();
   dropboxInstance.value = new Dropbox({
     auth: dbxAuth,
+    accessToken: dropboxAuthDetails.value.access_token,
+    refreshToken: dropboxAuthDetails.value.refresh_token,
+    clientId: CLIENT_ID,
+    customHeaders: {
+      Authorization: `Bearer ${dropboxAuthDetails.value.access_token}`
+    }
   });
-  // const filesAndFolders = await dropboxInstance.value.filesListFolder({
-  //   path: "",
+
+  // dropboxInstance.value.filesUpload({
+  //   contents: JSON.stringify({
+  //     transactions: JSON.parse(storedTransactions.value).data,
+  //     accounts: JSON.parse(storedAccounts.value).data,
+  //   }),
+  //   path: "/data.json",
   // });
-  // const dataJson = filesAndFolders.find((file: { name: string; }) => {
-  //   return file.name === 'data.json'
-  // })
-  dropboxInstance.value.filesUpload({
-    contents: JSON.stringify({
-      transactions: JSON.parse(storedTransactions.value).data,
-      accounts: JSON.parse(storedAccounts.value).data,
-    }),
-    path: '/data.json'
+
+  const filesAndFolders = await dropboxInstance.value.filesListFolder({
+    path: "",
   });
-  console.log();
-  // console.log(filesAndFolders);
+
+  console.log(filesAndFolders);
+
+  const file = await dropboxInstance.value.filesDownload({path:filesAndFolders.result.entries[0].path_lower})
+  console.log(file.result.fileBlob)
+  const blob = new Blob([file.result.fileBlob]);
+  const data = await blob.text();
+  console.log(JSON.parse(data));
 }
 </script>
 <style lang="scss">
