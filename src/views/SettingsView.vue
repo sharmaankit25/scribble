@@ -2,8 +2,7 @@
   <h1>Settings Page</h1>
   <br />
 
-  
-  <template v-if="!accessCode">
+  <template v-if="!dropboxAuthDetails">
     <div class="form-control" v-if="dropboxGeneratedAuthUrl">
       <div class="input-group">
         <input
@@ -62,7 +61,25 @@
     </div>
     <button class="btn btn-info" @click="doAuth">Sync via Dropbox</button>
   </template>
-  <div>Synced to your Dropbox</div>
+  <div v-else>
+    <button class="btn btn-primary btn-sm" @click="syncAndBackupData">
+      <svg
+        class="h-5 w-5"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" />
+        <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -5v5h5" />
+        <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 5v-5h-5" />
+      </svg>
+    </button>
+  </div>
 
   <hr class="my-2" />
   Current Currency: {{ settings.currency.name }} ({{
@@ -100,27 +117,32 @@
 import { Dropbox, DropboxAuth } from "dropbox";
 import { useClipboard, useLocalStorage, useSessionStorage } from "@vueuse/core";
 import { useSettingsStore } from "@/stores/settings";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 const { settings } = useSettingsStore();
 
-var CLIENT_ID = "qp6c0ab2yi8lvl0";
-let authUrl = ref<string>("");
-async function generatePKCEAuthUrl() {
-  const codeVerifier = "sdasd232323";
-  const textAsBuffer = new TextEncoder().encode(codeVerifier);
-  const hashBuffer = await window.crypto.subtle.digest("SHA-256", textAsBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const digest = hashArray
-    .map((b) => b.toString(16)?.padStart(2, "0"))
-    .join("");
-  authUrl.value = `https://www.dropbox.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&code_challenge=${digest}&code_challenge_method=S256`;
+interface DropboxAuthDetailsInterface {
+  access_token: string;
+  account_id: string;
+  expires_in: number;
+  refresh_token: string;
+  scope: string;
+  token_type: string;
+  uid: string;
 }
+
+var CLIENT_ID = "qp6c0ab2yi8lvl0";
 
 const dropboxGeneratedAuthUrl = ref<string>("");
 const dropboxAccessCode = ref<string>("");
+const dropboxInstance = ref();
 const codeVerifier = useSessionStorage("codeVerifier", "");
-const accessCode = useLocalStorage("accessCode", "");
+const dropboxAuthDetails = useLocalStorage("dropboxAuth", {});
+
+const storedTransactions = useLocalStorage("transactions", "");
+const storedAccounts = useLocalStorage("accounts", "");
 const { copy, copied, isSupported } = useClipboard({});
+
+const dbxAuth = new DropboxAuth({ clientId: CLIENT_ID });
 
 async function submitDropboxAccessCode() {
   if (codeVerifier.value) {
@@ -133,18 +155,18 @@ async function submitDropboxAccessCode() {
     "",
     dropboxAccessCode.value
   );
-  accessCode.value = response.result.access_token;
+  console.log(response);
+  dropboxAuthDetails.value = response.result;
   dbxAuth.setAccessToken(response.result.access_token);
-  var dbx = new Dropbox({
+  dropboxInstance.value = new Dropbox({
     auth: dbxAuth,
   });
-  const filesAndFolders = await dbx.filesListFolder({
+
+  const filesAndFolders = await dropboxInstance.value.filesListFolder({
     path: "",
   });
   console.log(filesAndFolders);
 }
-
-const dbxAuth = new DropboxAuth({ clientId: CLIENT_ID });
 
 async function doAuth() {
   try {
@@ -165,39 +187,28 @@ async function doAuth() {
   }
 }
 
-onMounted(async () => {
-  console.log("mounted in the composition api!");
-  generatePKCEAuthUrl();
-  // Set the login anchors href using dbx.getAuthenticationUrl()
-  // dbx.getAuthenticationUrl(`https://www.dropbox.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&code_challenge=${digest}&code_challenge_method=S256`).then((authUrl) => {
-  //     console.log(authUrl);
+async function syncAndBackupData() {
+  dbxAuth.setAccessToken(dropboxAuthDetails.value.access_token);
+  // dbxAuth.checkAndRefreshAccessToken();
+  dropboxInstance.value = new Dropbox({
+    auth: dbxAuth,
+  });
+  // const filesAndFolders = await dropboxInstance.value.filesListFolder({
+  //   path: "",
+  // });
+  // const dataJson = filesAndFolders.find((file: { name: string; }) => {
+  //   return file.name === 'data.json'
   // })
-
-  // var dbx = new Dropbox({ accessToken: process.env.VUE_APP_DROPBOX_API_KEY });
-  // console.log(dbx)
-
-  // dbx.filesListFolder({path: ''})
-  //   .then(function(response) {
-  //     console.log(response);
-  //   })
-  //   .catch(function(error) {
-  //     console.log(error);
-  //   });
-
-  //   const store = new Storage();
-  //   await store.create();
-  //   const storeObj = await store.set('name', 'Mr. Ionitron')
-  //   store.forEach((key, value, index) => {
-  //     console.log(key, value, index)
-  //   });
-
-  //   console.log(store)
-  //   // dbx.filesUpload({
-  //   contents: 'Abc 1234',
-  //   autorename: true,
-  //   path: '/data.json'
-  // })
-});
+  dropboxInstance.value.filesUpload({
+    contents: JSON.stringify({
+      transactions: JSON.parse(storedTransactions.value).data,
+      accounts: JSON.parse(storedAccounts.value).data,
+    }),
+    path: '/data.json'
+  });
+  console.log();
+  // console.log(filesAndFolders);
+}
 </script>
 <style lang="scss">
 li {
