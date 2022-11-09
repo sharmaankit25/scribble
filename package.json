@@ -12,6 +12,8 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "tauri:dev": "cargo tauri dev",
+    "tauri:build": "cargo tauri build",
+    "tauri:info": "cargo tauri info",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs"
@@ -57,9 +59,12 @@
     "start-server-and-test": "^1.14.0",
     "tailwindcss": "^3.1.8",
     "typescript": "~4.7.4",
-    "vite": "^3.0.9",
+    "vite": "^3.2.3",
+    "vite-plugin-pwa": "^0.13.3",
     "vitepress": "^1.0.0-alpha.19",
     "vitest": "^0.23.0",
-    "vue-tsc": "^0.40.7"
+    "vue-tsc": "^0.40.7",
+    "workbox-precaching": "^6.5.4",
+    "workbox-routing": "^6.5.4"
   }
 }

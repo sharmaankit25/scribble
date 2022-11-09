@@ -8,6 +8,7 @@ import Group from "./stores/models/Group.modal";
 import Category from "./stores/models/Category.modal";
 import { useRepo } from "pinia-orm";
 import AccountType from "./stores/models/AccountType.modal";
+import ReloadPrompt from "./ReloadPrompt.vue";
 
 const groupRepo = useRepo(Group);
 const categoryRepo = useRepo(Category);
@@ -22,6 +23,7 @@ accountTypeRepo.save(appSettings.accounts.types);
   <Header />
   <Sidebar />
   <main class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+    <ReloadPrompt />
     <flash-message></flash-message>
     <RouterView />
   </main>

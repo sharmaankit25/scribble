@@ -225,7 +225,10 @@ async function syncAndBackupData() {
   console.log(file.result.fileBlob)
   const blob = new Blob([file.result.fileBlob]);
   const data = await blob.text();
-  console.log(JSON.parse(data));
+  const savedData = JSON.parse(data)
+  
+  storedTransactions.value = JSON.stringify({data:savedData.transactions})
+  storedAccounts.value = JSON.stringify({data:savedData.accounts})
 }
 </script>
 <style lang="scss">

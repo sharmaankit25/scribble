@@ -1,5 +1,11 @@
 {
   "files": [],
+  "compilerOptions": {
+    "types": [
+      "vite-plugin-pwa/client"
+    ],
+    "lib": ["ESNext", "DOM", "WebWorker"]
+  },
   "references": [
     {
       "path": "./tsconfig.config.json"
