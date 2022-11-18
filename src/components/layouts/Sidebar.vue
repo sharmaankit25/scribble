@@ -5,7 +5,7 @@
     <nav>
       <ul class="menu bg-base-100">
         <li>
-          <RouterLink to="/">
+          <RouterLink exact-active-class="active" to="/">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5"
@@ -23,7 +23,7 @@
           </RouterLink>
         </li>
         <li>
-          <RouterLink to="/accounts">
+          <RouterLink exact-active-class="active" to="/accounts">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -41,7 +41,7 @@
           </RouterLink>
         </li>
         <li>
-          <RouterLink to="/transactions">
+          <RouterLink exact-active-class="active" to="/transactions">
             <svg
               class="h-5 w-5"
               viewBox="0 0 24 24"
@@ -58,7 +58,7 @@
           </RouterLink>
         </li>
         <li>
-          <RouterLink to="/about">
+          <RouterLink exact-active-class="active" to="/about">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5"
@@ -94,7 +94,7 @@
           </a>
         </li> -->
         <li>
-          <RouterLink to="/settings">
+          <RouterLink exact-active-class="active" to="/settings">
             <svg
               class="h-5 w-5"
               viewBox="0 0 24 24"
